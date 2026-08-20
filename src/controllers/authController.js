@@ -1,4 +1,5 @@
 import { prisma } from "../congig/db.js";
+import bcrypt from "bcryptjs";
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -16,7 +17,9 @@ const register = async (req, res) => {
 
 
   //Hash Password
-  
+  const salt = await bcrypt.genSalt(10)
+  const hashPassword = await bcrypt.hash(password, salt);
+
 
 
 };
