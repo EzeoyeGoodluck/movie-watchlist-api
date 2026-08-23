@@ -1,6 +1,6 @@
 import express from "express";
 import { config } from "dotenv";
-import { connectDB, disconnectDB } from "./congig/db.js";
+import { connectDB, disconnectDB } from "./config/db.js";
 
 //import Routes
 import movieRoutes from "./routes/movieRoutes.js";
@@ -35,7 +35,7 @@ process.on("unhandledRejection", (err) => {
 });
 
 //  Handle uncaught exeptions
-process.om("UncaughtException", async (err) => {
+process.on("UncaughtException", async (err) => {
   console.error("Uncaught Exception:", err);
   await disconnectDB();
   process.exit(1);
