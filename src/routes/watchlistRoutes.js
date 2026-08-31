@@ -1,5 +1,5 @@
 import express from "express";
-import { addTowatchlist } from "../controllers/watchlistController.js";
+import { addTowatchlist, removeFromwatchlist } from "../controllers/watchlistController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -7,7 +7,9 @@ const router = express.Router();
 router.use(authMiddleware);
 
 router.post("/", addTowatchlist);
-// router.post("/login", login);
-// router.post("/logout", logout);
+
+
+
+router.delete("/:id", removeFromwatchlist)
 
 export default router;
