@@ -1,5 +1,53 @@
 import { prisma } from "../config/db.js";
 
+
+
+
+const updateWatchlistItem = async (req, res) => {
+
+  const { status, rating,  notes} = req.body;
+
+  // Find watchlist item and verify ownership
+   const watchlistItem = await prisma.watchlistItem.findUnique({
+    where: { id: req.params.id },
+  });
+
+  if (!watchlistItem) {
+    return res.status(404).json({ error: "watchlist item not found" });
+  }
+
+   //Ensure only owner can update watchlistitem
+  if (watchlistItem.userId !== req.user.id) {
+    return res
+      .status(403)
+      .json({ error: "Not allowed to update this watchlist item" });
+  }
+
+  //Build update data
+  const updateData = {};
+  if ( status !== undefined) updateData.status = status.toUppercase();
+  if ( rating !== undefined) updateData.rating = rating;
+  if ( notes !== undefined) updateData.notes = notes;
+
+
+
+  //Update watchlist item 
+
+  const updatedItem = await prisma.updateWatchlistItem.update({
+    where: { id: req.params.id},
+    data: updateData,
+  });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      watchlistItem: updatedItem
+    },
+  });
+
+
+}
+
 const removeFromwatchlist = async (req, res) => {
   //find watchlist item and verify ownership
   const watchlistItem = await prisma.watchlistItem.findUnique({
@@ -7,7 +55,7 @@ const removeFromwatchlist = async (req, res) => {
   });
 
   if (!watchlistItem) {
-    return res.status(404).json({ error: " watchlist item not found" });
+    return res.status(404).json({ error: "watchlist item not found" });
   }
 
   //Ensure only owner can delete
@@ -71,4 +119,4 @@ const addTowatchlist = async (req, res) => {
   });
 };
 
-export { addTowatchlist, removeFromwatchlist };
+export { addTowatchlist, removeFromwatchlist, updateWatchlistItem };
