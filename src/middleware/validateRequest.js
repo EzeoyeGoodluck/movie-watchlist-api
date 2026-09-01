@@ -1,4 +1,4 @@
-import { json } from "zod";
+
 
 export const validateRequest = (schema) => {
   return (req, res, next) => {
@@ -13,7 +13,7 @@ export const validateRequest = (schema) => {
         .map((err) => err._errors)
         .flat();
 
-      console.log(flatErrors);
+     
       return res.status(400).json({ message: flatErrors.join(" ,") });
     }
 
